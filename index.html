@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Evolution of Shots Across the NBA</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-dark bg-dark-custom">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">
+                <i class="bi bi-dribbble"></i> Evolution of Shots Across the NBA
+            </span>
+            <span class="navbar-text">
+                2004 - 2024 | 21 Seasons of Shot Data
+            </span>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container-fluid main-content">
+        <div class="row g-3">
+            <!-- Left Column: Court Visualization -->
+            <div class="col-lg-8">
+                <div class="card bg-dark-card">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-graph-up"></i> Shot Chart</span>
+                        <div class="btn-group btn-group-sm" role="group">
+                            <button type="button" class="btn btn-outline-light" id="resetZoom" title="Reset View">
+                                <i class="bi bi-arrows-fullscreen"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="card-body p-2">
+                        <div id="court-container">
+                            <!-- D3 visualization will be rendered here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Season Slider -->
+                <div class="card bg-dark-card mt-3">
+                    <div class="card-body py-2">
+                        <div class="d-flex align-items-center gap-3">
+                            <button class="btn btn-sm btn-outline-light" id="playBtn" title="Play/Pause">
+                                <i class="bi bi-play-fill" id="playIcon"></i>
+                            </button>
+                            <div class="flex-grow-1">
+                                <label for="seasonSlider" class="form-label mb-0 small">
+                                    Season: <span id="seasonLabel">All Seasons</span>
+                                </label>
+                                <input type="range" class="form-range" id="seasonSlider"
+                                       min="0" max="21" value="0" step="1">
+                            </div>
+                            <div class="d-flex gap-2 align-items-center">
+                                <label class="form-label mb-0 small">Speed:</label>
+                                <select class="form-select form-select-sm bg-dark text-light" id="speedSelect" style="width: 80px;">
+                                    <option value="2000">Slow</option>
+                                    <option value="1000" selected>Normal</option>
+                                    <option value="500">Fast</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Controls & Stats -->
+            <div class="col-lg-4">
+                <!-- KPI Cards -->
+                <div class="row g-2 mb-3">
+                    <div class="col-6">
+                        <div class="card bg-dark-card kpi-card">
+                            <div class="card-body text-center py-2">
+                                <div class="kpi-value" id="kpi-shots">0</div>
+                                <div class="kpi-label">Total Shots</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card bg-dark-card kpi-card">
+                            <div class="card-body text-center py-2">
+                                <div class="kpi-value" id="kpi-fg">0%</div>
+                                <div class="kpi-label">FG%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card bg-dark-card kpi-card">
+                            <div class="card-body text-center py-2">
+                                <div class="kpi-value" id="kpi-3p">0%</div>
+                                <div class="kpi-label">3P%</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card bg-dark-card kpi-card">
+                            <div class="card-body text-center py-2">
+                                <div class="kpi-value" id="kpi-efg">0%</div>
+                                <div class="kpi-label">eFG%</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shot Distribution -->
+                <div class="card bg-dark-card mb-3">
+                    <div class="card-header py-2">
+                        <i class="bi bi-pie-chart"></i> Shot Distribution
+                    </div>
+                    <div class="card-body py-2">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small">2PT Attempts</span>
+                            <span class="badge bg-info" id="kpi-2pt-pct">0%</span>
+                        </div>
+                        <div class="progress mb-3" style="height: 8px;">
+                            <div class="progress-bar bg-info" id="progress-2pt" style="width: 0%"></div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small">3PT Attempts</span>
+                            <span class="badge bg-warning" id="kpi-3pt-pct">0%</span>
+                        </div>
+                        <div class="progress" style="height: 8px;">
+                            <div class="progress-bar bg-warning" id="progress-3pt" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Filters -->
+                <div class="card bg-dark-card">
+                    <div class="card-header py-2 d-flex justify-content-between align-items-center">
+                        <span><i class="bi bi-funnel"></i> Filters</span>
+                        <button class="btn btn-sm btn-outline-secondary" id="resetFilters">
+                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                        </button>
+                    </div>
+                    <div class="card-body">
+                        <!-- Team Filter -->
+                        <div class="mb-3">
+                            <label class="form-label small">Team</label>
+                            <select class="form-select form-select-sm bg-dark text-light" id="teamFilter" multiple>
+                            </select>
+                        </div>
+
+                        <!-- Position Filter -->
+                        <div class="mb-3">
+                            <label class="form-label small">Position</label>
+                            <div class="btn-group w-100" role="group" id="positionFilter">
+                                <input type="checkbox" class="btn-check" id="pos-all" value="all" checked>
+                                <label class="btn btn-outline-light btn-sm" for="pos-all">All</label>
+
+                                <input type="checkbox" class="btn-check" id="pos-g" value="G">
+                                <label class="btn btn-outline-light btn-sm" for="pos-g">G</label>
+
+                                <input type="checkbox" class="btn-check" id="pos-f" value="F">
+                                <label class="btn btn-outline-light btn-sm" for="pos-f">F</label>
+
+                                <input type="checkbox" class="btn-check" id="pos-c" value="C">
+                                <label class="btn btn-outline-light btn-sm" for="pos-c">C</label>
+                            </div>
+                        </div>
+
+                        <!-- Player Filter -->
+                        <div class="mb-3">
+                            <label class="form-label small">Player</label>
+                            <select class="form-select form-select-sm bg-dark text-light" id="playerFilter" multiple>
+                            </select>
+                        </div>
+
+                        <!-- Zone Filter -->
+                        <div class="mb-3">
+                            <label class="form-label small">Zone</label>
+                            <select class="form-select form-select-sm bg-dark text-light" id="zoneFilter" multiple>
+                            </select>
+                        </div>
+
+                        <!-- Shot Result Filter -->
+                        <div class="mb-0">
+                            <label class="form-label small">Shot Result</label>
+                            <div class="btn-group w-100" role="group">
+                                <input type="radio" class="btn-check" name="shotResult" id="shot-all" value="all" checked>
+                                <label class="btn btn-outline-light btn-sm" for="shot-all">All</label>
+
+                                <input type="radio" class="btn-check" name="shotResult" id="shot-made" value="made">
+                                <label class="btn btn-outline-success btn-sm" for="shot-made">Made</label>
+
+                                <input type="radio" class="btn-check" name="shotResult" id="shot-missed" value="missed">
+                                <label class="btn btn-outline-danger btn-sm" for="shot-missed">Missed</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-3 py-2 bg-dark-custom">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <span class="text-muted small">
+                        UC Berkeley DATASCI 209 | Final Project
+                    </span>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <span class="text-muted small">
+                        Adam Valadez | Andres Salcedo | Deric Liang | Mario Blanco-Alcala
+                    </span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Legend Modal -->
+    <div class="modal fade" id="legendModal" tabindex="-1">
+        <div class="modal-dialog modal-sm">
+            <div class="modal-content bg-dark text-light">
+                <div class="modal-header py-2">
+                    <h6 class="modal-title">Legend</h6>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex align-items-center mb-2">
+                        <span class="legend-dot made me-2"></span>
+                        <span class="small">Made Shot</span>
+                    </div>
+                    <div class="d-flex align-items-center">
+                        <span class="legend-dot missed me-2"></span>
+                        <span class="small">Missed Shot</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="spinner-border text-light" role="status">
+            <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="mt-3 text-light">Loading NBA Shot Data...</div>
+        <div class="progress mt-2" style="width: 200px; height: 4px;">
+            <div class="progress-bar" id="loading-progress" style="width: 0%"></div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/crossfilter2@1.5.4/crossfilter.min.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

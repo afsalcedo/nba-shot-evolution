@@ -1,0 +1,406 @@
+/* CSS Variables */
+:root {
+    --bg-dark: #0d1117;
+    --bg-card: #161b22;
+    --bg-card-hover: #1c2128;
+    --border-color: #30363d;
+    --text-primary: #e6edf3;
+    --text-secondary: #8b949e;
+    --accent-orange: #f47521;
+    --accent-blue: #58a6ff;
+    --shot-made: #2ea043;
+    --shot-missed: #f85149;
+    --court-wood: #c9a66b;
+    --court-lines: #ffffff;
+}
+
+/* Global Styles */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+    min-height: 100vh;
+}
+
+/* Custom Dark Background */
+.bg-dark-custom {
+    background-color: var(--bg-card) !important;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.bg-dark-card {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color);
+}
+
+/* Main Content Area */
+.main-content {
+    padding: 1rem;
+    min-height: calc(100vh - 120px);
+}
+
+/* Card Styles */
+.card {
+    border-radius: 8px;
+    transition: border-color 0.2s ease;
+}
+
+.card:hover {
+    border-color: var(--text-secondary);
+}
+
+.card-header {
+    background-color: transparent;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-primary);
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+.card-body {
+    color: var(--text-primary);
+}
+
+/* Court Container */
+#court-container {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #2d2015 0%, #1a1410 100%);
+    border-radius: 6px;
+    overflow: hidden;
+    min-height: 450px;
+}
+
+#court-container svg {
+    max-width: 100%;
+    height: auto;
+}
+
+#court-container canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+}
+
+/* KPI Cards */
+.kpi-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+}
+
+.kpi-value {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--accent-blue);
+    line-height: 1.2;
+}
+
+.kpi-label {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Progress Bars */
+.progress {
+    background-color: var(--bg-dark);
+    border-radius: 4px;
+}
+
+/* Form Controls */
+.form-label {
+    color: var(--text-secondary);
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+}
+
+.form-select,
+.form-control {
+    background-color: var(--bg-dark) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-primary) !important;
+}
+
+.form-select:focus,
+.form-control:focus {
+    border-color: var(--accent-blue) !important;
+    box-shadow: 0 0 0 0.2rem rgba(88, 166, 255, 0.25) !important;
+}
+
+.form-select option {
+    background-color: var(--bg-dark);
+    color: var(--text-primary);
+}
+
+/* Multi-select styling */
+.form-select[multiple] {
+    height: auto;
+    min-height: 80px;
+    max-height: 120px;
+}
+
+.form-select[multiple] option:checked {
+    background: var(--accent-blue) linear-gradient(0deg, var(--accent-blue) 0%, var(--accent-blue) 100%);
+    color: white;
+}
+
+/* Range Slider */
+.form-range {
+    height: 1.5rem;
+}
+
+.form-range::-webkit-slider-thumb {
+    background: var(--accent-orange);
+}
+
+.form-range::-moz-range-thumb {
+    background: var(--accent-orange);
+}
+
+.form-range::-webkit-slider-runnable-track {
+    background: var(--border-color);
+}
+
+.form-range::-moz-range-track {
+    background: var(--border-color);
+}
+
+/* Button Styles */
+.btn-outline-light {
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+}
+
+.btn-outline-light:hover {
+    background-color: var(--bg-card-hover);
+    border-color: var(--text-secondary);
+    color: var(--text-primary);
+}
+
+.btn-check:checked + .btn-outline-light {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: white;
+}
+
+.btn-outline-success {
+    border-color: var(--shot-made);
+    color: var(--shot-made);
+}
+
+.btn-check:checked + .btn-outline-success {
+    background-color: var(--shot-made);
+    border-color: var(--shot-made);
+}
+
+.btn-outline-danger {
+    border-color: var(--shot-missed);
+    color: var(--shot-missed);
+}
+
+.btn-check:checked + .btn-outline-danger {
+    background-color: var(--shot-missed);
+    border-color: var(--shot-missed);
+}
+
+.btn-outline-secondary {
+    border-color: var(--border-color);
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+.btn-outline-secondary:hover {
+    background-color: var(--bg-card-hover);
+    color: var(--text-primary);
+}
+
+/* Legend Dots */
+.legend-dot {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+}
+
+.legend-dot.made {
+    background-color: var(--shot-made);
+}
+
+.legend-dot.missed {
+    background-color: var(--shot-missed);
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(13, 17, 23, 0.95);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: opacity 0.3s ease;
+}
+
+.loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Footer */
+.footer {
+    border-top: 1px solid var(--border-color);
+}
+
+/* Navbar */
+.navbar-brand {
+    color: var(--text-primary) !important;
+    font-weight: 600;
+}
+
+.navbar-brand i {
+    color: var(--accent-orange);
+}
+
+.navbar-text {
+    color: var(--text-secondary) !important;
+    font-size: 0.85rem;
+}
+
+/* Tooltip Styles (for shot hover) */
+.shot-tooltip {
+    position: absolute;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 0.8rem;
+    pointer-events: none;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    max-width: 200px;
+}
+
+.shot-tooltip .player-name {
+    font-weight: 600;
+    color: var(--accent-blue);
+    margin-bottom: 4px;
+}
+
+.shot-tooltip .shot-info {
+    color: var(--text-secondary);
+    font-size: 0.75rem;
+}
+
+/* Badge Styles */
+.badge {
+    font-weight: 500;
+}
+
+/* Modal Styles */
+.modal-content {
+    border: 1px solid var(--border-color);
+}
+
+.modal-header {
+    border-bottom-color: var(--border-color);
+}
+
+/* Scrollbar Styles */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--bg-dark);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--border-color);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--text-secondary);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 991.98px) {
+    .main-content {
+        padding: 0.5rem;
+    }
+
+    #court-container {
+        min-height: 350px;
+    }
+
+    .kpi-value {
+        font-size: 1.25rem;
+    }
+
+    .kpi-label {
+        font-size: 0.65rem;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .navbar-brand {
+        font-size: 1rem;
+    }
+
+    .navbar-text {
+        display: none;
+    }
+
+    #court-container {
+        min-height: 280px;
+    }
+
+    .kpi-value {
+        font-size: 1rem;
+    }
+}
+
+/* Animation for KPI updates */
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+    100% { transform: scale(1); }
+}
+
+.kpi-value.updated {
+    animation: pulse 0.3s ease;
+}
+
+/* Court Wood Texture Effect */
+.court-background {
+    fill: url(#wood-pattern);
+}
+
+/* Shot dots animation */
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.shot-dot {
+    animation: fadeIn 0.2s ease;
+}
