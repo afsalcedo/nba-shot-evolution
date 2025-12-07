@@ -29,14 +29,20 @@
     <div class="container-fluid main-content">
         <div class="row g-3">
             <!-- Left Column: Court Visualization -->
-            <div class="col-lg-8">
-                <div class="card bg-dark-card">
+            <div class="col-lg-8 d-flex flex-column">
+                <!-- Tip Box -->
+                <div class="alert alert-tip mb-2" role="alert">
+                    <i class="bi bi-lightbulb"></i> <strong>Tip:</strong> Click on court zones to filter. Hold <strong>Ctrl</strong> (Win) or <strong>⌘</strong> (Mac) + click to select multiple zones.
+                </div>
+
+                <div class="card bg-dark-card flex-grow-1">
                     <div class="card-header d-flex justify-content-between align-items-center">
                         <span><i class="bi bi-graph-up"></i> Shot Chart</span>
-                        <div class="btn-group btn-group-sm" role="group">
-                            <button type="button" class="btn btn-outline-light" id="resetZoom" title="Reset View">
-                                <i class="bi bi-arrows-fullscreen"></i>
-                            </button>
+                        <div class="d-flex align-items-center gap-2">
+                            <span class="legend-inline">
+                                <span class="legend-dot made"></span> Made
+                                <span class="legend-dot missed ms-2"></span> Missed
+                            </span>
                         </div>
                     </div>
                     <div class="card-body p-2">
@@ -60,6 +66,8 @@
                                 <input type="range" class="form-range" id="seasonSlider"
                                        min="0" max="21" value="0" step="1">
                             </div>
+                            <select class="form-select form-select-sm bg-dark text-light" id="seasonDropdown" style="width: 90px;">
+                            </select>
                             <div class="d-flex gap-2 align-items-center">
                                 <label class="form-label mb-0 small">Speed:</label>
                                 <select class="form-select form-select-sm bg-dark text-light" id="speedSelect" style="width: 80px;">
@@ -69,91 +77,130 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="text-secondary small mt-1">
+                            Note: Season year is the year the season ended (e.g., 2015 = 2014-15 season).
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shot Distribution and Zone Breakdown side by side -->
+                <div class="row g-3 mt-0">
+                    <div class="col-md-6">
+                        <!-- Shot Distribution -->
+                        <div class="card bg-dark-card h-100">
+                            <div class="card-header py-2">
+                                <i class="bi bi-pie-chart"></i> Shot Distribution
+                            </div>
+                            <div class="card-body py-2">
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="small">2PT Attempts</span>
+                                    <span class="badge bg-info" id="kpi-2pt-pct">0%</span>
+                                </div>
+                                <div class="progress mb-3" style="height: 8px;">
+                                    <div class="progress-bar bg-info" id="progress-2pt" style="width: 0%"></div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mb-1">
+                                    <span class="small">3PT Attempts</span>
+                                    <span class="badge bg-warning text-dark" id="kpi-3pt-pct">0%</span>
+                                </div>
+                                <div class="progress" style="height: 8px;">
+                                    <div class="progress-bar bg-warning" id="progress-3pt" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Zone Breakdown -->
+                        <div class="card bg-dark-card h-100">
+                            <div class="card-header py-2">
+                                <i class="bi bi-bullseye"></i> FG% by Zone
+                            </div>
+                            <div class="card-body py-2">
+                                <div id="zoneBreakdown" class="zone-breakdown">
+                                    <!-- Will be populated by JS -->
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <!-- Right Column: Controls & Stats -->
             <div class="col-lg-4">
-                <!-- KPI Cards -->
-                <div class="row g-2 mb-3">
-                    <div class="col-6">
-                        <div class="card bg-dark-card kpi-card">
-                            <div class="card-body text-center py-2">
-                                <div class="kpi-value" id="kpi-shots">0</div>
-                                <div class="kpi-label">Total Shots</div>
+                <!-- KPI Panel -->
+                <div class="card bg-dark-card mb-3">
+                    <div class="card-header py-2">
+                        <i class="bi bi-bar-chart"></i> Statistics
+                    </div>
+                    <div class="card-body py-2">
+                        <div class="kpi-grid">
+                            <div class="kpi-item">
+                                <span class="kpi-value" id="kpi-shots">0</span>
+                                <span class="kpi-label">Shots</span>
+                            </div>
+                            <div class="kpi-item">
+                                <span class="kpi-value" id="kpi-makes">0</span>
+                                <span class="kpi-label">Makes</span>
+                            </div>
+                            <div class="kpi-item">
+                                <span class="kpi-value" id="kpi-fg">0%</span>
+                                <span class="kpi-label">FG%</span>
+                            </div>
+                            <div class="kpi-item">
+                                <span class="kpi-value" id="kpi-3p">0%</span>
+                                <span class="kpi-label">3P%</span>
+                            </div>
+                            <div class="kpi-item">
+                                <span class="kpi-value" id="kpi-3pa-rate">0%</span>
+                                <span class="kpi-label">3PA Rate</span>
+                            </div>
+                            <div class="kpi-item">
+                                <span class="kpi-value" id="kpi-efg">--</span>
+                                <span class="kpi-label">eFG%</span>
                             </div>
                         </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="card bg-dark-card kpi-card">
-                            <div class="card-body text-center py-2">
-                                <div class="kpi-value" id="kpi-fg">0%</div>
-                                <div class="kpi-label">FG%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="card bg-dark-card kpi-card">
-                            <div class="card-body text-center py-2">
-                                <div class="kpi-value" id="kpi-3p">0%</div>
-                                <div class="kpi-label">3P%</div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="card bg-dark-card kpi-card">
-                            <div class="card-body text-center py-2">
-                                <div class="kpi-value" id="kpi-efg">0%</div>
-                                <div class="kpi-label">eFG%</div>
-                            </div>
+                        <div class="mt-2 pt-2 border-top border-secondary">
+                            <span class="small">ΔFG% vs League: <span id="kpi-fg-diff" class="fw-bold">+0.0 pp</span></span>
                         </div>
                     </div>
                 </div>
 
-                <!-- Shot Distribution -->
+                <!-- Current Filters Summary -->
                 <div class="card bg-dark-card mb-3">
                     <div class="card-header py-2">
-                        <i class="bi bi-pie-chart"></i> Shot Distribution
+                        <i class="bi bi-filter-circle"></i> Current Filters
                     </div>
                     <div class="card-body py-2">
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="small">2PT Attempts</span>
-                            <span class="badge bg-info" id="kpi-2pt-pct">0%</span>
-                        </div>
-                        <div class="progress mb-3" style="height: 8px;">
-                            <div class="progress-bar bg-info" id="progress-2pt" style="width: 0%"></div>
-                        </div>
-                        <div class="d-flex justify-content-between align-items-center mb-2">
-                            <span class="small">3PT Attempts</span>
-                            <span class="badge bg-warning" id="kpi-3pt-pct">0%</span>
-                        </div>
-                        <div class="progress" style="height: 8px;">
-                            <div class="progress-bar bg-warning" id="progress-3pt" style="width: 0%"></div>
+                        <div id="filterSummary" class="small">
+                            None (all values included).
                         </div>
                     </div>
                 </div>
 
                 <!-- Filters -->
-                <div class="card bg-dark-card">
+                <div class="card bg-dark-card mb-3">
                     <div class="card-header py-2 d-flex justify-content-between align-items-center">
                         <span><i class="bi bi-funnel"></i> Filters</span>
                         <button class="btn btn-sm btn-outline-secondary" id="resetFilters">
-                            <i class="bi bi-arrow-counterclockwise"></i> Reset
+                            <i class="bi bi-arrow-counterclockwise"></i> Clear All
                         </button>
                     </div>
                     <div class="card-body">
                         <!-- Team Filter -->
-                        <div class="mb-3">
-                            <label class="form-label small">Team</label>
-                            <select class="form-select form-select-sm bg-dark text-light" id="teamFilter" multiple>
+                        <div class="filter-block mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label small mb-0 fw-bold">Team</label>
+                                <button class="btn btn-xs btn-outline-secondary" id="clearTeam">Clear</button>
+                            </div>
+                            <input type="search" class="form-control form-control-sm bg-dark text-light mb-1" id="teamSearch" placeholder="Search...">
+                            <select class="form-select form-select-sm bg-dark text-light" id="teamFilter" multiple size="4">
                             </select>
                         </div>
 
                         <!-- Position Filter -->
-                        <div class="mb-3">
-                            <label class="form-label small">Position</label>
-                            <div class="btn-group w-100" role="group" id="positionFilter">
+                        <div class="filter-block mb-3">
+                            <label class="form-label small mb-0 fw-bold">Position</label>
+                            <div class="btn-group w-100 mt-1" role="group" id="positionFilter">
                                 <input type="checkbox" class="btn-check" id="pos-all" value="all" checked>
                                 <label class="btn btn-outline-light btn-sm" for="pos-all">All</label>
 
@@ -168,24 +215,10 @@
                             </div>
                         </div>
 
-                        <!-- Player Filter -->
-                        <div class="mb-3">
-                            <label class="form-label small">Player</label>
-                            <select class="form-select form-select-sm bg-dark text-light" id="playerFilter" multiple>
-                            </select>
-                        </div>
-
-                        <!-- Zone Filter -->
-                        <div class="mb-3">
-                            <label class="form-label small">Zone</label>
-                            <select class="form-select form-select-sm bg-dark text-light" id="zoneFilter" multiple>
-                            </select>
-                        </div>
-
                         <!-- Shot Result Filter -->
-                        <div class="mb-0">
-                            <label class="form-label small">Shot Result</label>
-                            <div class="btn-group w-100" role="group">
+                        <div class="filter-block mb-3">
+                            <label class="form-label small mb-0 fw-bold">Shot Result</label>
+                            <div class="btn-group w-100 mt-1" role="group" id="shotResultFilter">
                                 <input type="radio" class="btn-check" name="shotResult" id="shot-all" value="all" checked>
                                 <label class="btn btn-outline-light btn-sm" for="shot-all">All</label>
 
@@ -196,6 +229,48 @@
                                 <label class="btn btn-outline-danger btn-sm" for="shot-missed">Missed</label>
                             </div>
                         </div>
+
+                        <!-- Player Filter -->
+                        <div class="filter-block mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label small mb-0 fw-bold">Player</label>
+                                <button class="btn btn-xs btn-outline-secondary" id="clearPlayer">Clear</button>
+                            </div>
+                            <input type="search" class="form-control form-control-sm bg-dark text-light mb-1" id="playerSearch" placeholder="Search...">
+                            <select class="form-select form-select-sm bg-dark text-light" id="playerFilter" multiple size="4">
+                            </select>
+                        </div>
+
+                        <!-- Zone Filter -->
+                        <div class="filter-block mb-3">
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <label class="form-label small mb-0 fw-bold">Basic Zone</label>
+                                <button class="btn btn-xs btn-outline-secondary" id="clearZone">Clear</button>
+                            </div>
+                            <input type="search" class="form-control form-control-sm bg-dark text-light mb-1" id="zoneSearch" placeholder="Search...">
+                            <select class="form-select form-select-sm bg-dark text-light" id="zoneFilter" multiple size="4">
+                            </select>
+                        </div>
+
+                        <!-- Multi-select Tip -->
+                        <div class="text-secondary small">
+                            <i class="bi bi-info-circle"></i> Hold <strong>Ctrl</strong> (Win) or <strong>⌘</strong> (Mac) to select multiple items.
+                            If nothing is selected, all values are included.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Glossary -->
+                <div class="card bg-dark-card">
+                    <div class="card-header py-2">
+                        <i class="bi bi-book"></i> Glossary
+                    </div>
+                    <div class="card-body py-2 small">
+                        <div><strong>FG%</strong>: Field goal percentage (made ÷ attempts)</div>
+                        <div><strong>3P%</strong>: 3-point field goal percentage</div>
+                        <div><strong>3PA Rate</strong>: Share of shots that are 3-point attempts</div>
+                        <div><strong>eFG%</strong>: Effective FG% = (FGM + 0.5 × 3PM) ÷ FGA</div>
+                        <div><strong>ΔFG%</strong>: FG% minus league average for that season</div>
                     </div>
                 </div>
             </div>
@@ -207,40 +282,18 @@
         <div class="container-fluid">
             <div class="row align-items-center">
                 <div class="col-md-6">
-                    <span class="text-muted small">
+                    <span class="text-secondary small">
                         UC Berkeley DATASCI 209 | Final Project
                     </span>
                 </div>
                 <div class="col-md-6 text-md-end">
-                    <span class="text-muted small">
+                    <span class="text-secondary small">
                         Adam Valadez | Andres Salcedo | Deric Liang | Mario Blanco-Alcala
                     </span>
                 </div>
             </div>
         </div>
     </footer>
-
-    <!-- Legend Modal -->
-    <div class="modal fade" id="legendModal" tabindex="-1">
-        <div class="modal-dialog modal-sm">
-            <div class="modal-content bg-dark text-light">
-                <div class="modal-header py-2">
-                    <h6 class="modal-title">Legend</h6>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="d-flex align-items-center mb-2">
-                        <span class="legend-dot made me-2"></span>
-                        <span class="small">Made Shot</span>
-                    </div>
-                    <div class="d-flex align-items-center">
-                        <span class="legend-dot missed me-2"></span>
-                        <span class="small">Missed Shot</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Loading Overlay -->
     <div id="loading-overlay" class="loading-overlay">

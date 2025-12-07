@@ -65,6 +65,20 @@ body {
     color: var(--text-primary);
 }
 
+/* Tip Alert */
+.alert-tip {
+    background-color: #fff3e0;
+    border: 1px solid #ffb74d;
+    color: #5d4037;
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 12px;
+}
+
+.alert-tip i {
+    color: #ff9800;
+}
+
 /* Court Container */
 #court-container {
     position: relative;
@@ -75,7 +89,20 @@ body {
     background: linear-gradient(135deg, #2d2015 0%, #1a1410 100%);
     border-radius: 6px;
     overflow: hidden;
-    min-height: 450px;
+    min-height: 420px;
+    flex-grow: 1;
+}
+
+/* Make shot chart card body flex to expand court */
+.card.flex-grow-1 {
+    display: flex;
+    flex-direction: column;
+}
+
+.card.flex-grow-1 > .card-body {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 #court-container svg {
@@ -90,34 +117,75 @@ body {
     pointer-events: none;
 }
 
-/* KPI Cards */
-.kpi-card {
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+/* KPI Grid */
+.kpi-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
 }
 
-.kpi-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+.kpi-item {
+    text-align: center;
+    padding: 8px 4px;
+    background: var(--bg-dark);
+    border-radius: 6px;
 }
 
 .kpi-value {
-    font-size: 1.5rem;
+    display: block;
+    font-size: 1.1rem;
     font-weight: 700;
     color: var(--accent-blue);
     line-height: 1.2;
 }
 
 .kpi-label {
-    font-size: 0.75rem;
+    display: block;
+    font-size: 0.65rem;
     color: var(--text-secondary);
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    margin-top: 2px;
 }
 
-/* Progress Bars */
-.progress {
-    background-color: var(--bg-dark);
-    border-radius: 4px;
+/* Filter Block */
+.filter-block {
+    border-bottom: 1px solid var(--border-color);
+    padding-bottom: 12px;
+}
+
+.filter-block:last-of-type {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+/* Small Button */
+.btn-xs {
+    padding: 1px 6px;
+    font-size: 0.7rem;
+    line-height: 1.4;
+}
+
+/* Legend */
+.legend-inline {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+.legend-dot {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    margin-right: 4px;
+}
+
+.legend-dot.made {
+    background-color: var(--shot-made);
+}
+
+.legend-dot.missed {
+    background-color: var(--shot-missed);
 }
 
 /* Form Controls */
@@ -149,7 +217,7 @@ body {
 .form-select[multiple] {
     height: auto;
     min-height: 80px;
-    max-height: 120px;
+    max-height: 100px;
 }
 
 .form-select[multiple] option:checked {
@@ -190,32 +258,6 @@ body {
     color: var(--text-primary);
 }
 
-.btn-check:checked + .btn-outline-light {
-    background-color: var(--accent-blue);
-    border-color: var(--accent-blue);
-    color: white;
-}
-
-.btn-outline-success {
-    border-color: var(--shot-made);
-    color: var(--shot-made);
-}
-
-.btn-check:checked + .btn-outline-success {
-    background-color: var(--shot-made);
-    border-color: var(--shot-made);
-}
-
-.btn-outline-danger {
-    border-color: var(--shot-missed);
-    color: var(--shot-missed);
-}
-
-.btn-check:checked + .btn-outline-danger {
-    background-color: var(--shot-missed);
-    border-color: var(--shot-missed);
-}
-
 .btn-outline-secondary {
     border-color: var(--border-color);
     color: var(--text-secondary);
@@ -227,20 +269,18 @@ body {
     color: var(--text-primary);
 }
 
-/* Legend Dots */
-.legend-dot {
-    display: inline-block;
-    width: 12px;
-    height: 12px;
-    border-radius: 50%;
+/* Clickable Court Zones */
+.court-zone {
+    fill: rgba(255, 165, 0, 0.08);
+    stroke: rgba(0, 0, 0, 0.15);
+    stroke-width: 1;
+    cursor: pointer;
+    transition: fill 0.15s ease, stroke 0.15s ease;
 }
 
-.legend-dot.made {
-    background-color: var(--shot-made);
-}
-
-.legend-dot.missed {
-    background-color: var(--shot-missed);
+.court-zone:hover {
+    fill: rgba(30, 136, 229, 0.25);
+    stroke: rgba(0, 0, 0, 0.4);
 }
 
 /* Loading Overlay */
@@ -284,45 +324,6 @@ body {
     font-size: 0.85rem;
 }
 
-/* Tooltip Styles (for shot hover) */
-.shot-tooltip {
-    position: absolute;
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 6px;
-    padding: 8px 12px;
-    font-size: 0.8rem;
-    pointer-events: none;
-    z-index: 1000;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-    max-width: 200px;
-}
-
-.shot-tooltip .player-name {
-    font-weight: 600;
-    color: var(--accent-blue);
-    margin-bottom: 4px;
-}
-
-.shot-tooltip .shot-info {
-    color: var(--text-secondary);
-    font-size: 0.75rem;
-}
-
-/* Badge Styles */
-.badge {
-    font-weight: 500;
-}
-
-/* Modal Styles */
-.modal-content {
-    border: 1px solid var(--border-color);
-}
-
-.modal-header {
-    border-bottom-color: var(--border-color);
-}
-
 /* Scrollbar Styles */
 ::-webkit-scrollbar {
     width: 8px;
@@ -342,6 +343,113 @@ body {
     background: var(--text-secondary);
 }
 
+/* FG Diff Colors */
+.fg-positive {
+    color: var(--shot-made) !important;
+}
+
+.fg-negative {
+    color: var(--shot-missed) !important;
+}
+
+/* Override Bootstrap text-muted for dark theme */
+.text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Filter Summary Text */
+#filterSummary {
+    color: var(--text-primary) !important;
+}
+
+/* Footer text */
+.footer .text-muted {
+    color: var(--text-secondary) !important;
+}
+
+/* Form check labels (for checkboxes and radio buttons) */
+.form-check-label {
+    color: var(--text-primary);
+}
+
+/* Style checkboxes and radio buttons for dark theme */
+.form-check-input {
+    background-color: var(--bg-dark);
+    border-color: var(--border-color);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+}
+
+.form-check-input:focus {
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 0.2rem rgba(88, 166, 255, 0.25);
+}
+
+/* Button Check Styles (for Position and Shot Result filters) */
+.btn-check:checked + .btn-outline-light {
+    background-color: var(--accent-blue);
+    border-color: var(--accent-blue);
+    color: white;
+}
+
+.btn-outline-success {
+    border-color: var(--shot-made);
+    color: var(--shot-made);
+}
+
+.btn-check:checked + .btn-outline-success {
+    background-color: var(--shot-made);
+    border-color: var(--shot-made);
+}
+
+.btn-outline-danger {
+    border-color: var(--shot-missed);
+    color: var(--shot-missed);
+}
+
+.btn-check:checked + .btn-outline-danger {
+    background-color: var(--shot-missed);
+    border-color: var(--shot-missed);
+}
+
+/* Progress Bars */
+.progress {
+    background-color: var(--bg-dark);
+    border-radius: 4px;
+}
+
+/* Zone Breakdown */
+.zone-breakdown {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+.zone-item {
+    text-align: center;
+    padding: 6px 4px;
+    background: var(--bg-dark);
+    border-radius: 4px;
+}
+
+.zone-item .zone-name {
+    font-size: 0.65rem;
+    color: var(--text-secondary);
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 2px;
+    line-height: 1.2;
+}
+
+.zone-item .zone-fg {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--accent-blue);
+}
+
 /* Responsive Adjustments */
 @media (max-width: 991.98px) {
     .main-content {
@@ -353,11 +461,15 @@ body {
     }
 
     .kpi-value {
-        font-size: 1.25rem;
+        font-size: 1rem;
     }
 
     .kpi-label {
-        font-size: 0.65rem;
+        font-size: 0.6rem;
+    }
+
+    .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
@@ -375,7 +487,7 @@ body {
     }
 
     .kpi-value {
-        font-size: 1rem;
+        font-size: 0.9rem;
     }
 }
 
@@ -388,19 +500,4 @@ body {
 
 .kpi-value.updated {
     animation: pulse 0.3s ease;
-}
-
-/* Court Wood Texture Effect */
-.court-background {
-    fill: url(#wood-pattern);
-}
-
-/* Shot dots animation */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-.shot-dot {
-    animation: fadeIn 0.2s ease;
 }
