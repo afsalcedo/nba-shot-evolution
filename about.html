@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - Evolution of Shots Across the NBA</title>
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="css/style.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Header -->
+    <nav class="navbar navbar-dark bg-dark-custom">
+        <div class="container-fluid">
+            <a href="index.html" class="navbar-brand mb-0 h1">
+                <i class="bi bi-dribbble"></i> Evolution of Shots Across the NBA
+            </a>
+            <div class="d-flex gap-3">
+                <a href="index.html" class="btn btn-outline-light btn-sm">
+                    <i class="bi bi-graph-up"></i> Visualization
+                </a>
+                <a href="about.html" class="btn btn-light btn-sm">
+                    <i class="bi bi-info-circle"></i> About
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container main-content py-4">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <!-- Project Overview -->
+                <div class="card bg-dark-card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i class="bi bi-journal-text"></i> Project Overview</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="lead mb-0">
+                            An animated visualization in D3 of shot charts in the NBA, spanning from the 2003-04 to 2023-24 seasons.
+                            Features filters on teams, players, season, position, and court zones, with supplemental statistics
+                            displaying field goal percentage (FG%) and effective field goal percentage (eFG%).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Goals -->
+                <div class="card bg-dark-card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i class="bi bi-bullseye"></i> Visualization Goals</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-2"><strong>Tasks users can perform:</strong></p>
+                        <ul>
+                            <li>Describe whether there is a trend in shot location over seasons</li>
+                            <li>Describe whether shooting patterns change over the course of a game</li>
+                            <li>Describe a player's efficiency at a given location</li>
+                            <li>For league veterans, observe changes in player performance over time</li>
+                        </ul>
+                        <p class="mb-2"><strong>Insights this visualization reveals:</strong></p>
+                        <ul class="mb-0">
+                            <li>NBA teams have moved to more 3PT shots over time</li>
+                            <li>Who are the most effective players at each range?</li>
+                            <li>Is there a left-court / right-court dominance, or are shots balanced from the two sides?</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Intended Audience -->
+                <div class="card bg-dark-card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i class="bi bi-people"></i> Intended Audience</h4>
+                    </div>
+                    <div class="card-body">
+                        <ul class="mb-0">
+                            <li>Team front offices, coaches, and analysts</li>
+                            <li>Fans of the NBA</li>
+                            <li>Sports bettors</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Data Sources -->
+                <div class="card bg-dark-card mb-4">
+                    <div class="card-header">
+                        <h4 class="mb-0"><i class="bi bi-database"></i> Data Sources</h4>
+                    </div>
+                    <div class="card-body">
+                        <p class="mb-0">
+                            <strong>Source:</strong> <a href="https://www.kaggle.com/datasets/mexwell/nba-shots" target="_blank" class="text-info">Kaggle - NBA Shots Dataset</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Back to Visualization -->
+                <div class="text-center">
+                    <a href="index.html" class="btn btn-primary btn-lg">
+                        <i class="bi bi-graph-up"></i> Explore the Visualization
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer mt-3 py-2 bg-dark-custom">
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <span class="text-secondary small">
+                        UC Berkeley DATASCI 209 | Final Project | Fall 2024
+                    </span>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <span class="text-secondary small">
+                        Adam Valadez | Andres Salcedo | Deric Liang | Mario Blanco-Alcala
+                    </span>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
